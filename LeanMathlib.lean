@@ -4,7 +4,7 @@ import Mathlib.GroupTheory.FiniteAbelian.Basic
 import Mathlib.RingTheory.RootsOfUnity.EnoughRootsOfUnity
 
 open MonoidHom
-lemma dvd_exponent {ι G : Type*} [Finite ι] [CommGroup G] {n : ι → ℕ}
+theorem dvd_exponent {ι G : Type*} [Finite ι] [CommGroup G] {n : ι → ℕ}
     (e : G ≃* ((i : ι) → Multiplicative (ZMod (n i)))) (i : ι) :
     n i ∣ Monoid.exponent G := by
   classical -- to get `DecidableEq ι`
