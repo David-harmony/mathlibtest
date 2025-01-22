@@ -1,18 +1,14 @@
 -- This module serves as the root of the `LeanMathlib` library.
 -- Import modules here that should be built as part of the library.
-import LeanMathlib.Basic
+import Mathlib.GroupTheory.FiniteAbelian.Basic
+import Mathlib.RingTheory.RootsOfUnity.EnoughRootsOfUnity
 
-import Mathlib
-
-universe u
-
-/--
-If G is a finite group of order p squared, where p is a prime number, then G is abelian.
--/
-theorem group_of_order_p_squared_is_abelian
-  (prime_p : Nat.Prime p) -- Assume p is a prime number
-  (group_G : Type u) [Group group_G] -- Assume G is a group
-  [Fintype group_G] -- Assume G is finite
-  (cardinality_G : Fintype.card group_G = p * p) -- Assume the order of G is p squared
-  : forall (a b : group_G), a * b = b * a :=
-  sorry
+open MonoidHom
+lemma dvd_exponent {ι G : Type*} [Finite ι] [CommGroup G] {n : ι → ℕ}
+    (e : G ≃* ((i : ι) → Multiplicative (ZMod (n i)))) (i : ι) :
+    n i ∣ Monoid.exponent G := by
+  classical -- to get `DecidableEq ι`
+  have : n i = orderOf (e.symm <| Pi.mulSingle i <| .ofAdd 1) := by
+    simpa only [MulEquiv.orderOf_eq, orderOf_piMulSingle, orderOf_ofAdd_eq_addOrderOf]
+      using (ZMod.addOrderOf_one (n i)).symm
+  exact this ▸ Monoid.order_dvd_exponent _
